@@ -5,8 +5,8 @@ class Puzzle:
         self.moves = []
     
     def search(self, n = 0):
-        for i in range(self.h + 1):
-            for j in range(self.w + 1):
+        for i in range(3):
+            for j in range(3):
                 if self.m[i][j] == n:
                     return i, j
 
@@ -49,7 +49,11 @@ L = Left, C = Center, R = Right
             print('\n'.join(' '.join(POSITION_TRANSLATE[j] for j in i) for i in self.m))
         else:
             print('\n\033[1mYour puzzle should now be solved!\033[0m')
-        
+    
+    def rotate2x2(self, coord, direction):
+        d = len(direction) - 1
+        for i in range(4):
+            self.move0(ALL_2X2_ROTATIONS[coord][d][i], LOCATIONS_IN_ROTATIONS[coord][-d - (2 * d - 1) * i])
 
 def calc(a, op, b):
     return tuple(map(eval, ALL_CALCS[op]))
@@ -70,5 +74,29 @@ ALL_CALCS = {  # for calc() function; saves time/memory as local variables don't
     '*': ('a[0] * b', 'a[1] * b'), 
     '/': ('a[0] / b', 'a[1] / b')
     }
+
+ALL_2X2_ROTATIONS = {
+    (0, 0): (((0, -1), (-1, 0), (0, 1), (1, 0)), 
+             ((-1, 0), (0, -1), (1, 0), (0, 1))),
+
+    (0, 1): (((-1, 0), (0, 1), (1, 0), (0, -1)), 
+             ((0, 1), (-1, 0), (0, -1), (1, 0))),
+
+    (1, 0): (((1, 0), (0, -1), (-1, 0), (0, 1)), 
+             ((0, -1), (1, 0), (0, 1), (-1, 0))),
+
+    (1, 1): (((0, 1), (1, 0), (0, -1), (-1, 0)), 
+             ((1, 0), (0, 1), (-1, 0), (0, -1)))
+}
+
+LOCATIONS_IN_ROTATIONS = {
+    (0, 0): ((1, 1), (1, 0), (0, 0), (0, 1), (1, 1)), 
+    
+    (0, 1): ((1, 1), (0, 1), (0, 2), (1, 2), (1, 1)), 
+    
+    (1, 0): ((1, 1), (2, 1), (2, 0), (1, 0), (1, 1)), 
+    
+    (1, 1): ((1, 1), (1, 2), (2, 2), (2, 1), (1, 1)), 
+}
 
 Puzzle(input('\033[1m\nEnter your numbers here: \033[0m')).solve()
