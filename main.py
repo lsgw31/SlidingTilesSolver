@@ -1,6 +1,7 @@
 import random
 class Puzzle:
-    def __init__(self, matrix_str = '123456780'):
+    def __init__(self, matrix_str = '12345678'):
+        matrix_str += '0'
         self.m = [[int(i) for i in matrix_str[:3]], [int(i) for i in matrix_str[3:6]], [int(i) for i in matrix_str[6:]]]
         self.moves = []
     
@@ -18,12 +19,8 @@ class Puzzle:
         self.moves.append(direction)
     
     def solve(self):
-        print("""
-If you entered your numbers correctly, this is what your puzzle should look like:
-B = Bottom, M = Middle, T = Top
-L = Left, C = Center, R = Right
-""")
-        print('\n'.join(' '.join(POSITION_TRANSLATE[j] for j in i) for i in self.m))
+        print('\nIf you entered your numbers correctly, this is what your puzzle should look like:')
+        print('\033[1m' + '\n'.join(' '.join(str(j) if j else ' ' for j in i) for i in self.m) + '\033[0m')
 
         # Put 1 in TL
         self.print_moves_and_puzzle()
@@ -45,8 +42,8 @@ L = Left, C = Center, R = Right
         print(', '.join(MOVE_TRANSLATE[i] for i in self.moves))
         self.moves.clear()
         if not solved:
-            print('\nYour puzzle should now look like this:\n')
-            print('\n'.join(' '.join(POSITION_TRANSLATE[j] for j in i) for i in self.m))
+            print('\nYour puzzle should now look like this:')
+            print('\033[1m' + '\n'.join(' '.join(str(j) if j else ' ' for j in i) for i in self.m) + '\033[0m')
         else:
             print('\n\033[1mYour puzzle should now be solved!\033[0m')
     
@@ -65,8 +62,6 @@ MOVE_TRANSLATE = {
     (0, -1): 'LEFT',
     (-1, 0): 'UP'
     }
-
-POSITION_TRANSLATE = ('  ', 'TL', 'TC', 'TR', 'ML', 'MC', 'MR', 'BL', 'BC')
 
 ALL_CALCS = {  # for calc() function; saves time/memory as local variables don't have to be continuously redefined
     '+': ('a[0] + b[0]', 'a[1] + b[1]'), 
