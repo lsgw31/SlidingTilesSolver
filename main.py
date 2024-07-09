@@ -1,4 +1,3 @@
-import random
 class Puzzle:
     def __init__(self, matrix_str = '12345678'):
         matrix_str += '0'
@@ -31,13 +30,10 @@ class Puzzle:
         self.place47()
         self.print_moves_and_puzzle()
 
-        # # Rotate BL 2x2 till it's solved
-        # self.print_moves_and_puzzle(solved = True)
+        self.finish_solve()
+        self.print_moves_and_puzzle(solved = True)
     
     def print_moves_and_puzzle(self, *, solved = False):
-        # for i in range(1, random.randint(5, 20)):
-        #     self.moves.append(random.choice(tuple(MOVE_TRANSLATE.keys())))  # for testing so that it can make moves and dev can see UI
-
         print('\n\nNow make these moves:')
         print(', '.join(MOVE_TRANSLATE[i] for i in self.moves))
         self.moves.clear()
@@ -102,6 +98,10 @@ class Puzzle:
         for numcoord, subcoord in FOUR_AND_SEVEN_ROTATIONS:
             if self.m[numcoord[0]][numcoord[1]] == 7:
                 self.rotate2x2(subcoord, 'cc')
+    
+    def finish_solve(self):
+        self.moves.extend(FINAL_ROTATIONS[tuple(self.m[1][2:] + self.m[2][1:])])
+
 
 def calc(a, op, b):
     return tuple(map(eval, ALL_CALCS[op]))
@@ -167,5 +167,11 @@ FOUR_AND_SEVEN_ROTATIONS = (
     ((2, 2), (1, 1)),
     ((2, 1), (1, 0))
 )
+
+FINAL_ROTATIONS = {
+    (6, 5, 8): [(1, 0), (0, 1)],
+    (5, 8, 6): [(0, 1), (1, 0)],
+    (8, 6, 5): [(1, 0), (0, 1), (-1, 0), (0, -1), (1, 0), (0, 1)],
+}
 
 Puzzle(input('\033[1m\nEnter your numbers here: \033[0m')).solve()
