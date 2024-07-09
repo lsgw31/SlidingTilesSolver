@@ -25,8 +25,8 @@ class Puzzle:
         self.place1()
         self.print_moves_and_puzzle()
 
-        # # First set of 2 (2 & 3)
-        # self.print_moves_and_puzzle()
+        self.place23()
+        self.print_moves_and_puzzle()
 
         # # Second set of 2 (4 & 7) (Share a method with above?)
         # self.print_moves_and_puzzle()
@@ -68,8 +68,23 @@ class Puzzle:
         
         for sub_coord in ONE_ROTATIONS[direction][3 - one[0] - one[1]:]:
             self.rotate2x2(sub_coord, direction)
+    
+    def place23(self):
+        if self.m[0][1:] == [2, 3]:
+            return
         
+        if self.m[0][2] == 3:
+            if self.m[1][2] == 2:
+                self.rotate2x2((1, 1), 'cc')
+            self.rotate2x2((0, 1), 'c')
         
+        for numcoord, subcoord in TWO_AND_THREE_ROTATIONS:
+            if self.m[numcoord[0]][numcoord[1]] == 2:
+                self.rotate2x2(subcoord, 'c')
+        
+        for numcoord, subcoord in TWO_AND_THREE_ROTATIONS:
+            if self.m[numcoord[0]][numcoord[1]] == 3:
+                self.rotate2x2(subcoord, 'c')
 
 def calc(a, op, b):
     return tuple(map(eval, ALL_CALCS[op]))
@@ -119,5 +134,13 @@ ONE_ROTATIONS = {
 
     'cc': ((1, 0), (1, 0), (0, 0))
 }
+
+TWO_AND_THREE_ROTATIONS = (
+    ((1, 0), (1, 0)),
+    ((2, 0), (1, 0)),
+    ((2, 1), (1, 1)),
+    ((2, 2), (1, 1)),
+    ((1, 2), (0, 1))
+)
 
 Puzzle(input('\033[1m\nEnter your numbers here: \033[0m')).solve()
