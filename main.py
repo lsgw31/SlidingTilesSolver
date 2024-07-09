@@ -28,8 +28,8 @@ class Puzzle:
         self.place23()
         self.print_moves_and_puzzle()
 
-        # # Second set of 2 (4 & 7) (Share a method with above?)
-        # self.print_moves_and_puzzle()
+        self.place47()
+        self.print_moves_and_puzzle()
 
         # # Rotate BL 2x2 till it's solved
         # self.print_moves_and_puzzle(solved = True)
@@ -85,6 +85,23 @@ class Puzzle:
         for numcoord, subcoord in TWO_AND_THREE_ROTATIONS:
             if self.m[numcoord[0]][numcoord[1]] == 3:
                 self.rotate2x2(subcoord, 'c')
+    
+    def place47(self):
+        if (self.m[1][0], self.m[2][0]) == (4, 7):
+            return
+        
+        if self.m[2][0] == 7:
+            if self.m[2][1] == 4:
+                self.rotate2x2((1, 1), 'cc')
+            self.rotate2x2((1, 0), 'cc')
+        
+        for numcoord, subcoord in FOUR_AND_SEVEN_ROTATIONS:
+            if self.m[numcoord[0]][numcoord[1]] == 4:
+                self.rotate2x2(subcoord, 'cc')
+        
+        for numcoord, subcoord in FOUR_AND_SEVEN_ROTATIONS:
+            if self.m[numcoord[0]][numcoord[1]] == 7:
+                self.rotate2x2(subcoord, 'cc')
 
 def calc(a, op, b):
     return tuple(map(eval, ALL_CALCS[op]))
@@ -141,6 +158,13 @@ TWO_AND_THREE_ROTATIONS = (
     ((2, 1), (1, 1)),
     ((2, 2), (1, 1)),
     ((1, 2), (0, 1))
+)
+
+FOUR_AND_SEVEN_ROTATIONS = (
+    ((1, 0), (1, 0)),
+    ((1, 2), (1, 1)),
+    ((2, 2), (1, 1)),
+    ((2, 1), (1, 0))
 )
 
 Puzzle(input('\033[1m\nEnter your numbers here: \033[0m')).solve()
