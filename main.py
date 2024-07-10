@@ -174,4 +174,4 @@ FINAL_ROTATIONS = {
     (8, 6, 5): [(1, 0), (0, 1), (-1, 0), (0, -1), (1, 0), (0, 1)],
 }
 
-Puzzle(input('\033[1m\nEnter your numbers here: \033[0m')).solve()
+print(Puzzle(input('\033[1mEnter the numbers in the order that they appear on the grid: \033[0m')).solve())
