@@ -18,30 +18,32 @@ class Puzzle:
         self.moves.append(direction)
     
     def solve(self):
-        print('\nIf you entered your numbers correctly, this is what your puzzle should look like:')
-        print('\033[1m' + '\n'.join(' '.join(str(j) if j else ' ' for j in i) for i in self.m) + '\033[0m')
+        ret = '\nIf you entered your numbers correctly, this is what your puzzle should look like:\n'
+        ret += '\033[1m' + '\n'.join(' '.join(str(j) if j else ' ' for j in i) for i in self.m) + '\033[0m'
 
         self.place1()
-        self.print_moves_and_puzzle()
+        ret += '\n'.join(self.yield_moves_and_puzzle())
 
         self.place23()
-        self.print_moves_and_puzzle()
+        ret += '\n'.join(self.yield_moves_and_puzzle())
 
         self.place47()
-        self.print_moves_and_puzzle()
+        ret += '\n'.join(self.yield_moves_and_puzzle())
 
         self.finish_solve()
-        self.print_moves_and_puzzle(solved = True)
+        ret += '\n'.join(self.yield_moves_and_puzzle(solved = True))
+
+        return ret
     
-    def print_moves_and_puzzle(self, *, solved = False):
-        print('\n\nNow make these moves:')
-        print(', '.join(MOVE_TRANSLATE[i] for i in self.moves))
+    def yield_moves_and_puzzle(self, *, solved = False):
+        yield '\n\n\nNow make these moves:'
+        yield ', '.join(MOVE_TRANSLATE[i] for i in self.moves)
         self.moves.clear()
         if not solved:
-            print('\nYour puzzle should now look like this:')
-            print('\033[1m' + '\n'.join(' '.join(str(j) if j else ' ' for j in i) for i in self.m) + '\033[0m')
+            yield '\nYour puzzle should now look like this:'
+            yield '\033[1m' + '\n'.join(' '.join(str(j) if j else ' ' for j in i) for i in self.m) + '\033[0m'
         else:
-            print('\n\033[1mYour puzzle should now be solved!\033[0m')
+            yield'\n\033[1mYour puzzle should now be solved!\033[0m'
     
     def rotate2x2(self, coord, direction):
         d = len(direction) - 1
