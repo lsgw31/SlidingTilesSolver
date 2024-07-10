@@ -12,7 +12,7 @@ class Puzzle:
 
     def move0(self, direction, zero = None):
         zero = self.search(0) if not zero else zero
-        to_coord = calc(zero, '+', direction)
+        to_coord = (zero[0] + direction[0], zero[1] + direction[1])
         self.m[zero[0]][zero[1]] = self.m[to_coord[0]][to_coord[1]]
         self.m[to_coord[0]][to_coord[1]] = 0
         self.moves.append(direction)
@@ -101,10 +101,6 @@ class Puzzle:
     
     def finish_solve(self):
         self.moves.extend(FINAL_ROTATIONS[tuple(self.m[1][2:] + self.m[2][1:])])
-
-
-def calc(a, op, b):
-    return tuple(map(eval, ALL_CALCS[op]))
 
 
 MOVE_TRANSLATE = {
